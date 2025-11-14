@@ -1,0 +1,208 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  profile       Profile?
+  applications  Application[]
+  documents     Document[]
+  interviews    MockInterview[]
+  portfolio     Portfolio?
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  summary   String?
+  skills    String[]
+
+  experience Json[]
+  projects  Json[]
+  education Json[]
+
+  rawResumeData Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Application {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  company     String
+  position    String
+  jobUrl      String?
+  jobDescription String @db.Text
+
+  status      ApplicationStatus @default(APPLIED)
+  matchScore  Int?
+
+  appliedAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  interviews  Interview[]
+  documents   Document[]
+}
+
+enum ApplicationStatus {
+  SAVED
+  APPLIED
+  INTERVIEWING
+  OFFER
+  REJECTED
+  ACCEPTED
+  DECLINED
+}
+
+model Interview {
+  id            String   @id @default(cuid())
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  type          InterviewType
+  scheduledAt   DateTime?
+  completedAt   DateTime?
+  outcome       String?
+  notes         String? @db.Text
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+enum InterviewType {
+  PHONE_SCREEN
+  TECHNICAL
+  BEHAVIORAL
+  ONSITE
+  FINAL
+  OTHER
+}
+
+model Document {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  applicationId String?
+  application   Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+
+  type          DocumentType
+  fileName      String
+  fileUrl       String
+  filePath      String
+  mimeType      String
+
+  metadata      Json?
+
+  createdAt     DateTime @default(now())
+}
+
+enum DocumentType {
+  UPLOADED_RESUME
+  GENERATED_RESUME
+  COVER_LETTER
+  PORTFOLIO
+  OTHER
+}
+
+model MockInterview {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  jobTitle  String?
+  questions Json[]
+  feedback  Json?
+
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+}
+
+model Portfolio {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  slug        String   @unique
+  template    String   @default("minimalist")
+
+  isPublished Boolean  @default(false)
+  publishedAt DateTime?
+
+  settings    Json?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ApiUsage {
+  id        String   @id @default(cuid())
+  userId    String
+
+  endpoint  String
+  provider  String
+  model     String
+
+  tokensIn  Int
+  tokensOut Int
+  cost      Float
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
