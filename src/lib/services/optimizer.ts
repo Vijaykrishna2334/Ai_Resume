@@ -1,7 +1,7 @@
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { prisma } from "@/lib/prisma";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export interface JDAnalysis {
   requiredSkills: string[];
@@ -22,7 +22,7 @@ export interface OptimizationSuggestion {
 
 export class ResumeOptimizer {
   async analyzeJobDescription(jd: string, userId: string): Promise<JDAnalysis> {
-    const prompt = `Analyze this job description and extract key information. Return JSON only.
+    const prompt = `Analyze this job description and extract key information. Return ONLY valid JSON with no markdown formatting or code blocks.
 
 Job Description:
 ${jd}
@@ -37,19 +37,32 @@ Return format:
   "responsibilities": ["resp1", "resp2"]
 }`;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
-      messages: [
-        { role: "system", content: "You are a job description analyzer. Always return valid JSON." },
-        { role: "user", content: prompt }
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0,
+    // Use Gemini 2.0 Flash for fast analysis
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.0-flash-exp",
+      generationConfig: {
+        temperature: 0,
+        responseMimeType: "application/json",
+      }
     });
 
-    await this.trackUsage(userId, "analyze_jd", completion);
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text_response = response.text();
 
-    return JSON.parse(completion.choices[0].message.content || "{}");
+    // Parse JSON response
+    let parsed;
+    try {
+      const cleanText = text_response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      parsed = JSON.parse(cleanText);
+    } catch (error) {
+      console.error("Failed to parse Gemini response:", text_response);
+      throw new Error("Failed to analyze job description");
+    }
+
+    await this.trackUsage(userId, "analyze_jd", "gemini-2.0-flash-exp", prompt, text_response);
+
+    return parsed;
   }
 
   calculateMatchScore(profile: any, jdAnalysis: JDAnalysis): number {
@@ -99,7 +112,7 @@ Provide 5-7 actionable suggestions to improve the resume for this job. Focus on:
 3. Keywords to include
 4. Gaps to address
 
-Return JSON:
+Return ONLY valid JSON with no markdown formatting:
 {
   "suggestions": [
     {
@@ -112,20 +125,31 @@ Return JSON:
   ]
 }`;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
-      messages: [
-        { role: "system", content: "You are a resume expert. Always return valid JSON." },
-        { role: "user", content: prompt }
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0.7,
+    // Use Gemini Pro 1.5 for more complex reasoning
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-pro",
+      generationConfig: {
+        temperature: 0.7,
+        responseMimeType: "application/json",
+      }
     });
 
-    await this.trackUsage(userId, "generate_suggestions", completion);
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text_response = response.text();
 
-    const result = JSON.parse(completion.choices[0].message.content || "{ \"suggestions\": [] }");
-    return result.suggestions || [];
+    let parsed;
+    try {
+      const cleanText = text_response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      parsed = JSON.parse(cleanText);
+    } catch (error) {
+      console.error("Failed to parse Gemini response:", text_response);
+      return [];
+    }
+
+    await this.trackUsage(userId, "generate_suggestions", "gemini-1.5-pro", prompt, text_response);
+
+    return parsed.suggestions || [];
   }
 
   async generateCoverLetter(
@@ -154,33 +178,50 @@ Write a compelling cover letter that:
 
 Keep it concise (3-4 paragraphs). Use professional tone.`;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
-      messages: [
-        { role: "system", content: "You are a professional cover letter writer." },
-        { role: "user", content: prompt }
-      ],
-      temperature: 0.8,
+    // Use Gemini Pro 1.5 for creative writing
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-pro",
+      generationConfig: {
+        temperature: 0.8,
+      }
     });
 
-    await this.trackUsage(userId, "generate_cover_letter", completion);
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text_response = response.text();
 
-    return completion.choices[0].message.content || "";
+    await this.trackUsage(userId, "generate_cover_letter", "gemini-1.5-pro", prompt, text_response);
+
+    return text_response || "";
   }
 
-  private async trackUsage(userId: string, endpoint: string, completion: any) {
-    const costPer1kTokens = 0.01;
-    const totalTokens = (completion.usage?.prompt_tokens || 0) + (completion.usage?.completion_tokens || 0);
-    const cost = (totalTokens / 1000) * costPer1kTokens;
+  private async trackUsage(userId: string, endpoint: string, model: string, prompt: string, response: string) {
+    const tokensIn = Math.ceil(prompt.length / 4); // Approximate
+    const tokensOut = Math.ceil(response.length / 4); // Approximate
+
+    // Pricing varies by model
+    let inputCostPer1M, outputCostPer1M;
+
+    if (model === "gemini-2.0-flash-exp") {
+      // Gemini 2.0 Flash pricing
+      inputCostPer1M = 0.075;
+      outputCostPer1M = 0.30;
+    } else {
+      // Gemini 1.5 Pro pricing
+      inputCostPer1M = 1.25;
+      outputCostPer1M = 5.00;
+    }
+
+    const cost = (tokensIn / 1000000) * inputCostPer1M + (tokensOut / 1000000) * outputCostPer1M;
 
     await prisma.apiUsage.create({
       data: {
         userId,
         endpoint,
-        provider: "openai",
-        model: "gpt-4-turbo",
-        tokensIn: completion.usage?.prompt_tokens || 0,
-        tokensOut: completion.usage?.completion_tokens || 0,
+        provider: "gemini",
+        model,
+        tokensIn,
+        tokensOut,
         cost,
       }
     });

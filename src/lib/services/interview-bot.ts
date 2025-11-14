@@ -1,29 +1,40 @@
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { prisma } from "@/lib/prisma";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export class InterviewBot {
   async generateQuestions(jobTitle: string, count: number = 5, userId: string): Promise<string[]> {
     const prompt = `Generate ${count} common interview questions for a ${jobTitle} position.
-Return JSON array of questions only.
+Return ONLY valid JSON with no markdown formatting or code blocks.
 
 Format: { "questions": ["Question 1?", "Question 2?", ...] }`;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
-      messages: [
-        { role: "system", content: "You are an interview preparation expert. Always return valid JSON." },
-        { role: "user", content: prompt }
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0.7,
+    // Use Gemini 2.0 Flash for fast question generation
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.0-flash-exp",
+      generationConfig: {
+        temperature: 0.7,
+        responseMimeType: "application/json",
+      }
     });
 
-    await this.trackUsage(userId, "generate_questions", completion);
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text_response = response.text();
 
-    const result = JSON.parse(completion.choices[0].message.content || "{ \"questions\": [] }");
-    return result.questions || [];
+    let parsed;
+    try {
+      const cleanText = text_response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      parsed = JSON.parse(cleanText);
+    } catch (error) {
+      console.error("Failed to parse Gemini response:", text_response);
+      return [];
+    }
+
+    await this.trackUsage(userId, "generate_questions", "gemini-2.0-flash-exp", prompt, text_response);
+
+    return parsed.questions || [];
   }
 
   async evaluateAnswer(question: string, answer: string, jobTitle: string, userId: string): Promise<string> {
@@ -39,18 +50,21 @@ Provide constructive feedback focusing on:
 
 Keep feedback concise and actionable.`;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
-      messages: [
-        { role: "system", content: "You are an experienced interview coach providing helpful feedback." },
-        { role: "user", content: prompt }
-      ],
-      temperature: 0.7,
+    // Use Gemini 1.5 Pro for better evaluation reasoning
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-pro",
+      generationConfig: {
+        temperature: 0.7,
+      }
     });
 
-    await this.trackUsage(userId, "evaluate_answer", completion);
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text_response = response.text();
 
-    return completion.choices[0].message.content || "";
+    await this.trackUsage(userId, "evaluate_answer", "gemini-1.5-pro", prompt, text_response);
+
+    return text_response || "";
   }
 
   async generateFeedback(interview: any, userId: string): Promise<any> {
@@ -60,7 +74,7 @@ Job Title: ${interview.jobTitle}
 Questions and Answers:
 ${JSON.stringify(interview.questions, null, 2)}
 
-Provide feedback in JSON format:
+Provide feedback in ONLY valid JSON with no markdown formatting:
 {
   "overall": "Overall assessment (2-3 sentences)",
   "strengths": ["Strength 1", "Strength 2", "Strength 3"],
@@ -69,34 +83,60 @@ Provide feedback in JSON format:
   "recommendations": ["Recommendation 1", "Recommendation 2"]
 }`;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
-      messages: [
-        { role: "system", content: "You are an interview expert providing detailed feedback. Always return valid JSON." },
-        { role: "user", content: prompt }
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0.7,
+    // Use Gemini 1.5 Pro for comprehensive analysis
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-pro",
+      generationConfig: {
+        temperature: 0.7,
+        responseMimeType: "application/json",
+      }
     });
 
-    await this.trackUsage(userId, "generate_feedback", completion);
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text_response = response.text();
 
-    return JSON.parse(completion.choices[0].message.content || "{}");
+    let parsed;
+    try {
+      const cleanText = text_response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      parsed = JSON.parse(cleanText);
+    } catch (error) {
+      console.error("Failed to parse Gemini response:", text_response);
+      return {};
+    }
+
+    await this.trackUsage(userId, "generate_feedback", "gemini-1.5-pro", prompt, text_response);
+
+    return parsed;
   }
 
-  private async trackUsage(userId: string, endpoint: string, completion: any) {
-    const costPer1kTokens = 0.01;
-    const totalTokens = (completion.usage?.prompt_tokens || 0) + (completion.usage?.completion_tokens || 0);
-    const cost = (totalTokens / 1000) * costPer1kTokens;
+  private async trackUsage(userId: string, endpoint: string, model: string, prompt: string, response: string) {
+    const tokensIn = Math.ceil(prompt.length / 4); // Approximate
+    const tokensOut = Math.ceil(response.length / 4); // Approximate
+
+    // Pricing varies by model
+    let inputCostPer1M, outputCostPer1M;
+
+    if (model === "gemini-2.0-flash-exp") {
+      // Gemini 2.0 Flash pricing
+      inputCostPer1M = 0.075;
+      outputCostPer1M = 0.30;
+    } else {
+      // Gemini 1.5 Pro pricing
+      inputCostPer1M = 1.25;
+      outputCostPer1M = 5.00;
+    }
+
+    const cost = (tokensIn / 1000000) * inputCostPer1M + (tokensOut / 1000000) * outputCostPer1M;
 
     await prisma.apiUsage.create({
       data: {
         userId,
         endpoint,
-        provider: "openai",
-        model: "gpt-4-turbo",
-        tokensIn: completion.usage?.prompt_tokens || 0,
-        tokensOut: completion.usage?.completion_tokens || 0,
+        provider: "gemini",
+        model,
+        tokensIn,
+        tokensOut,
         cost,
       }
     });

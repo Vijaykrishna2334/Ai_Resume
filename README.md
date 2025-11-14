@@ -53,7 +53,7 @@ AI Resume Builder is a comprehensive platform that helps job seekers:
 **Frontend:** Next.js 14, TypeScript, Tailwind CSS, shadcn/ui
 **Backend:** Next.js API Routes, Prisma ORM
 **Database:** PostgreSQL (Supabase recommended)
-**AI:** OpenAI GPT-4 or Claude
+**AI:** Google Gemini (Gemini 2.0 Flash + Gemini 1.5 Pro)
 **Storage:** AWS S3
 **Hosting:** Vercel
 **Auth:** NextAuth.js
@@ -87,7 +87,7 @@ cd ai-resume-builder
 
 # 2. Install dependencies
 npm install prisma @prisma/client next-auth @auth/prisma-adapter \
-  pdf-parse mammoth openai zod react-hook-form @hookform/resolvers
+  pdf-parse mammoth @google/generative-ai zod react-hook-form @hookform/resolvers
 
 # 3. Initialize Prisma
 npx prisma init
@@ -98,7 +98,7 @@ npx prisma migrate dev --name init
 
 # 5. Set up environment variables
 cp .env.example .env.local
-# Add: DATABASE_URL, NEXTAUTH_SECRET, OPENAI_API_KEY
+# Add: DATABASE_URL, NEXTAUTH_SECRET, GEMINI_API_KEY
 
 # 6. Start development
 npm run dev
@@ -143,17 +143,17 @@ ai-resume-builder/
 **Development:**
 - Vercel: $0 (Hobby)
 - Supabase: $0 (Free tier)
-- OpenAI: ~$50 (testing)
-- **Total: ~$50/month**
+- Gemini: $0 (Generous free tier - 1,500 requests/day)
+- **Total: ~$0/month**
 
 **Production (1K users):**
 - Vercel: $20
 - Supabase: $25
-- OpenAI: $200-400
+- Gemini: $20-50 (70% cheaper than OpenAI)
 - S3 + SendGrid + Sentry: $35
-- **Total: $280-480/month**
+- **Total: $100-130/month**
 
-**Per User:** $0.40-0.80
+**Per User:** $0.20-0.40 (58% cost reduction)
 
 ---
 

@@ -49,7 +49,7 @@ Required variables:
 DATABASE_URL="your_database_url"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="your_secret_here"  # Generate with: openssl rand -base64 32
-OPENAI_API_KEY="sk-your-api-key"
+GEMINI_API_KEY="your-gemini-api-key"  # Get from: https://aistudio.google.com/app/apikey
 ```
 
 ### 4. Run Database Migrations
@@ -170,7 +170,7 @@ Key models:
 - **Backend**: Next.js API Routes
 - **Database**: PostgreSQL with Prisma ORM
 - **Authentication**: NextAuth.js
-- **AI**: OpenAI GPT-4 (or Claude)
+- **AI**: Google Gemini (Gemini 2.0 Flash + Gemini 1.5 Pro)
 - **PDF Generation**: Puppeteer
 - **File Parsing**: pdf-parse, mammoth.js
 
@@ -236,12 +236,12 @@ npx prisma db pull
 npx prisma migrate reset
 ```
 
-### OpenAI API Errors
+### Gemini API Errors
 
-- Check API key is valid
-- Ensure you have credits
-- Check rate limits
-- Verify OPENAI_API_KEY in .env.local
+- Check API key is valid at https://aistudio.google.com/app/apikey
+- Ensure you have API quota available
+- Check rate limits (Gemini has generous free tier)
+- Verify GEMINI_API_KEY in .env.local
 
 ### Build Errors
 
@@ -272,7 +272,7 @@ npm run dev
 DATABASE_URL="production_db_url"
 NEXTAUTH_URL="https://yourdomain.com"
 NEXTAUTH_SECRET="production_secret"
-OPENAI_API_KEY="sk-..."
+GEMINI_API_KEY="your-gemini-api-key"
 ```
 
 ---

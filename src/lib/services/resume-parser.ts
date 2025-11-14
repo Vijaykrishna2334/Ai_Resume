@@ -1,9 +1,9 @@
 import pdf from "pdf-parse";
 import mammoth from "mammoth";
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { prisma } from "@/lib/prisma";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export interface ParsedResume {
   name: string;
@@ -51,7 +51,7 @@ export class ResumeParser {
   }
 
   private async structureWithAI(text: string, userId: string): Promise<ParsedResume> {
-    const prompt = `Extract structured information from this resume. Return JSON only.
+    const prompt = `Extract structured information from this resume. Return ONLY valid JSON with no markdown formatting or code blocks.
 
 Resume text:
 ${text}
@@ -89,35 +89,48 @@ Return format:
   ]
 }`;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
-      messages: [
-        { role: "system", content: "You are a resume parser. Always return valid JSON." },
-        { role: "user", content: prompt }
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0,
+    // Use Gemini 2.0 Flash for fast, cost-effective parsing
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.0-flash-exp",
+      generationConfig: {
+        temperature: 0,
+        responseMimeType: "application/json",
+      }
     });
 
-    const result = JSON.parse(completion.choices[0].message.content || "{}");
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text_response = response.text();
 
-    // Track API usage
+    // Parse JSON response
+    let parsed;
+    try {
+      // Remove markdown code blocks if present
+      const cleanText = text_response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      parsed = JSON.parse(cleanText);
+    } catch (error) {
+      console.error("Failed to parse Gemini response:", text_response);
+      throw new Error("Failed to parse resume data from AI response");
+    }
+
+    // Track API usage (Gemini doesn't provide token counts in same way)
     await this.trackUsage({
       userId,
       endpoint: "parse_resume",
-      provider: "openai",
-      model: "gpt-4-turbo",
-      tokensIn: completion.usage?.prompt_tokens || 0,
-      tokensOut: completion.usage?.completion_tokens || 0,
+      provider: "gemini",
+      model: "gemini-2.0-flash-exp",
+      tokensIn: Math.ceil(prompt.length / 4), // Approximate
+      tokensOut: Math.ceil(text_response.length / 4), // Approximate
     });
 
-    return result;
+    return parsed;
   }
 
   private async trackUsage(usage: any) {
-    const costPer1kTokens = 0.01;
-    const totalTokens = usage.tokensIn + usage.tokensOut;
-    const cost = (totalTokens / 1000) * costPer1kTokens;
+    // Gemini Flash pricing: $0.075 per 1M input tokens, $0.30 per 1M output tokens
+    const inputCostPer1M = 0.075;
+    const outputCostPer1M = 0.30;
+    const cost = (usage.tokensIn / 1000000) * inputCostPer1M + (usage.tokensOut / 1000000) * outputCostPer1M;
 
     await prisma.apiUsage.create({
       data: {
