@@ -89,9 +89,9 @@ Return format:
   ]
 }`;
 
-    // Use Gemini 2.0 Flash for fast, cost-effective parsing
+    // Use Gemini 2.5 Flash for fast, cost-effective parsing
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash-exp",
+      model: "gemini-2.5-flash",
       generationConfig: {
         temperature: 0,
         responseMimeType: "application/json",
@@ -118,7 +118,7 @@ Return format:
       userId,
       endpoint: "parse_resume",
       provider: "gemini",
-      model: "gemini-2.0-flash-exp",
+      model: "gemini-2.5-flash",
       tokensIn: Math.ceil(prompt.length / 4), // Approximate
       tokensOut: Math.ceil(text_response.length / 4), // Approximate
     });

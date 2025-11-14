@@ -37,9 +37,9 @@ Return format:
   "responsibilities": ["resp1", "resp2"]
 }`;
 
-    // Use Gemini 2.0 Flash for fast analysis
+    // Use Gemini 2.5 Flash for fast analysis
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash-exp",
+      model: "gemini-2.5-flash",
       generationConfig: {
         temperature: 0,
         responseMimeType: "application/json",
@@ -60,7 +60,7 @@ Return format:
       throw new Error("Failed to analyze job description");
     }
 
-    await this.trackUsage(userId, "analyze_jd", "gemini-2.0-flash-exp", prompt, text_response);
+    await this.trackUsage(userId, "analyze_jd", "gemini-2.5-flash", prompt, text_response);
 
     return parsed;
   }
@@ -127,7 +127,7 @@ Return ONLY valid JSON with no markdown formatting:
 
     // Use Gemini Pro 1.5 for more complex reasoning
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-pro",
+      model: "gemini-2.5-pro",
       generationConfig: {
         temperature: 0.7,
         responseMimeType: "application/json",
@@ -147,7 +147,7 @@ Return ONLY valid JSON with no markdown formatting:
       return [];
     }
 
-    await this.trackUsage(userId, "generate_suggestions", "gemini-1.5-pro", prompt, text_response);
+    await this.trackUsage(userId, "generate_suggestions", "gemini-2.5-pro", prompt, text_response);
 
     return parsed.suggestions || [];
   }
@@ -180,7 +180,7 @@ Keep it concise (3-4 paragraphs). Use professional tone.`;
 
     // Use Gemini Pro 1.5 for creative writing
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-pro",
+      model: "gemini-2.5-pro",
       generationConfig: {
         temperature: 0.8,
       }
@@ -190,7 +190,7 @@ Keep it concise (3-4 paragraphs). Use professional tone.`;
     const response = result.response;
     const text_response = response.text();
 
-    await this.trackUsage(userId, "generate_cover_letter", "gemini-1.5-pro", prompt, text_response);
+    await this.trackUsage(userId, "generate_cover_letter", "gemini-2.5-pro", prompt, text_response);
 
     return text_response || "";
   }
@@ -202,12 +202,12 @@ Keep it concise (3-4 paragraphs). Use professional tone.`;
     // Pricing varies by model
     let inputCostPer1M, outputCostPer1M;
 
-    if (model === "gemini-2.0-flash-exp") {
-      // Gemini 2.0 Flash pricing
+    if (model === "gemini-2.5-flash") {
+      // Gemini 2.5 Flash pricing
       inputCostPer1M = 0.075;
       outputCostPer1M = 0.30;
     } else {
-      // Gemini 1.5 Pro pricing
+      // Gemini 2.5 Pro pricing
       inputCostPer1M = 1.25;
       outputCostPer1M = 5.00;
     }

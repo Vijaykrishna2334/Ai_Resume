@@ -10,9 +10,9 @@ Return ONLY valid JSON with no markdown formatting or code blocks.
 
 Format: { "questions": ["Question 1?", "Question 2?", ...] }`;
 
-    // Use Gemini 2.0 Flash for fast question generation
+    // Use Gemini 2.5 Flash for fast question generation
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash-exp",
+      model: "gemini-2.5-flash",
       generationConfig: {
         temperature: 0.7,
         responseMimeType: "application/json",
@@ -32,7 +32,7 @@ Format: { "questions": ["Question 1?", "Question 2?", ...] }`;
       return [];
     }
 
-    await this.trackUsage(userId, "generate_questions", "gemini-2.0-flash-exp", prompt, text_response);
+    await this.trackUsage(userId, "generate_questions", "gemini-2.5-flash", prompt, text_response);
 
     return parsed.questions || [];
   }
@@ -50,9 +50,9 @@ Provide constructive feedback focusing on:
 
 Keep feedback concise and actionable.`;
 
-    // Use Gemini 1.5 Pro for better evaluation reasoning
+    // Use Gemini 2.5 Pro for better evaluation reasoning
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-pro",
+      model: "gemini-2.5-pro",
       generationConfig: {
         temperature: 0.7,
       }
@@ -62,7 +62,7 @@ Keep feedback concise and actionable.`;
     const response = result.response;
     const text_response = response.text();
 
-    await this.trackUsage(userId, "evaluate_answer", "gemini-1.5-pro", prompt, text_response);
+    await this.trackUsage(userId, "evaluate_answer", "gemini-2.5-pro", prompt, text_response);
 
     return text_response || "";
   }
@@ -83,9 +83,9 @@ Provide feedback in ONLY valid JSON with no markdown formatting:
   "recommendations": ["Recommendation 1", "Recommendation 2"]
 }`;
 
-    // Use Gemini 1.5 Pro for comprehensive analysis
+    // Use Gemini 2.5 Pro for comprehensive analysis
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-pro",
+      model: "gemini-2.5-pro",
       generationConfig: {
         temperature: 0.7,
         responseMimeType: "application/json",
@@ -105,7 +105,7 @@ Provide feedback in ONLY valid JSON with no markdown formatting:
       return {};
     }
 
-    await this.trackUsage(userId, "generate_feedback", "gemini-1.5-pro", prompt, text_response);
+    await this.trackUsage(userId, "generate_feedback", "gemini-2.5-pro", prompt, text_response);
 
     return parsed;
   }
@@ -117,12 +117,12 @@ Provide feedback in ONLY valid JSON with no markdown formatting:
     // Pricing varies by model
     let inputCostPer1M, outputCostPer1M;
 
-    if (model === "gemini-2.0-flash-exp") {
-      // Gemini 2.0 Flash pricing
+    if (model === "gemini-2.5-flash") {
+      // Gemini 2.5 Flash pricing
       inputCostPer1M = 0.075;
       outputCostPer1M = 0.30;
     } else {
-      // Gemini 1.5 Pro pricing
+      // Gemini 2.5 Pro pricing
       inputCostPer1M = 1.25;
       outputCostPer1M = 5.00;
     }
