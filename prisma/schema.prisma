@@ -24,6 +24,8 @@ model User {
   documents     Document[]
   interviews    MockInterview[]
   portfolio     Portfolio?
+  jobAlertPreferences JobAlertPreferences?
+  jobMatches    JobMatch[]
 }
 
 model Account {
@@ -169,6 +171,7 @@ model MockInterview {
   questions Json[]
   feedback  Json?
 
+  completed   Boolean  @default(false)
   completedAt DateTime?
   createdAt   DateTime @default(now())
 }
@@ -205,4 +208,87 @@ model ApiUsage {
   createdAt DateTime @default(now())
 
   @@index([userId, createdAt])
+}
+
+model JobAlertPreferences {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  enabled           Boolean  @default(true)
+  notificationEmail String
+  notificationTime  String   // Format: "HH:MM" in 24-hour format (e.g., "09:00")
+  timezone          String   @default("UTC")
+
+  maxJobsPerDay     Int      @default(10)
+  minMatchScore     Int      @default(70) // Only send jobs with match score >= this value
+
+  // Job preferences
+  desiredRoles      String[] // e.g., ["Software Engineer", "Full Stack Developer"]
+  locations         String[] // e.g., ["Remote", "New York", "San Francisco"]
+  jobTypes          String[] // e.g., ["Full-time", "Contract", "Remote"]
+  experienceLevels  String[] // e.g., ["Mid-level", "Senior"]
+  salaryMin         Int?
+  salaryMax         Int?
+
+  lastSentAt        DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Job {
+  id              String   @id @default(cuid())
+
+  // Job details
+  title           String
+  company         String
+  location        String?
+  jobType         String?  // Full-time, Part-time, Contract, Remote
+  experienceLevel String?  // Entry, Mid, Senior, Lead
+  description     String   @db.Text
+  requirements    String?  @db.Text
+  salary          String?
+
+  // Source information
+  source          String   // e.g., "LinkedIn", "Indeed", "Glassdoor"
+  externalId      String   // ID from the source platform
+  jobUrl          String
+
+  // Metadata
+  postedAt        DateTime?
+  expiresAt       DateTime?
+  isActive        Boolean  @default(true)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  matches         JobMatch[]
+
+  @@unique([source, externalId])
+  @@index([isActive, postedAt])
+  @@index([title, company])
+}
+
+model JobMatch {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  jobId       String
+  job         Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  matchScore  Int      // 0-100
+  matchReason String?  @db.Text // AI-generated explanation of why it's a match
+
+  // Tracking
+  sentAt      DateTime?
+  viewedAt    DateTime?
+  appliedAt   DateTime?
+
+  createdAt   DateTime @default(now())
+
+  @@unique([userId, jobId])
+  @@index([userId, sentAt])
+  @@index([matchScore])
 }
