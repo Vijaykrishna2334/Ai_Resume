@@ -24,9 +24,15 @@ AI Resume Builder is a comprehensive platform that helps job seekers:
 
 1. **[SETUP.md](./SETUP.md)** - START HERE
    - Environment setup instructions
-   - Database configuration
+   - Database configuration (Local or Supabase)
    - API key setup (Gemini)
    - Running the application
+
+1a. **[SUPABASE_SETUP.md](./SUPABASE_SETUP.md)** - Database Setup
+   - Complete Supabase configuration guide
+   - Cloud database setup (recommended)
+   - File storage configuration
+   - Migration guides
 
 2. **[JOB_ALERTS_FEATURE.md](./JOB_ALERTS_FEATURE.md)** - NEW!
    - Automated job matching documentation
@@ -68,10 +74,10 @@ AI Resume Builder is a comprehensive platform that helps job seekers:
 
 **Frontend:** Next.js 14, TypeScript, Tailwind CSS, shadcn/ui
 **Backend:** Next.js API Routes, Prisma ORM
-**Database:** PostgreSQL
+**Database:** PostgreSQL (Supabase or local)
 **AI:** Google Gemini (Gemini 2.5 Flash + Gemini 2.5 Pro)
 **Voice:** Web Speech API (SpeechRecognition + SpeechSynthesis)
-**Storage:** AWS S3 (future)
+**Storage:** Supabase Storage / Local filesystem
 **Hosting:** Vercel
 **Auth:** NextAuth.js with JWT
 

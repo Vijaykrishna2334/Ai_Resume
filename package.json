@@ -28,6 +28,7 @@
     "pdf-parse": "^1.1.1",
     "mammoth": "^1.8.0",
     "@google/generative-ai": "^0.21.0",
+    "@supabase/supabase-js": "^2.45.4",
     "puppeteer": "^23.6.0",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
