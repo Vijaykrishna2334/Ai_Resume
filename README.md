@@ -1,7 +1,7 @@
 # AI Resume Builder
 
 **Status:** V1 MVP Implemented ✅
-**Latest Feature:** Voice Interview with AI Coaching 🎤
+**Latest Feature:** Automated Daily Job Alerts 🔔
 
 ---
 
@@ -14,6 +14,7 @@ AI Resume Builder is a comprehensive platform that helps job seekers:
 - Create professional portfolio websites
 - Practice interviews with AI-powered mock interviews (text & voice)
 - Get voice coaching with detailed speaking metrics and feedback
+- **NEW: Receive personalized job matches via email daily**
 
 ---
 
@@ -27,20 +28,28 @@ AI Resume Builder is a comprehensive platform that helps job seekers:
    - API key setup (Gemini)
    - Running the application
 
-2. **[VOICE_INTERVIEW_FEATURE.md](./VOICE_INTERVIEW_FEATURE.md)** - NEW!
+2. **[JOB_ALERTS_FEATURE.md](./JOB_ALERTS_FEATURE.md)** - NEW!
+   - Automated job matching documentation
+   - Multi-source job aggregation
+   - AI-powered matching system
+   - Email notifications setup
+   - Cron scheduler configuration
+   - Complete API reference
+
+3. **[VOICE_INTERVIEW_FEATURE.md](./VOICE_INTERVIEW_FEATURE.md)**
    - Complete voice interview documentation
    - Technical implementation details
    - API specifications
    - Usage guide and best practices
    - Troubleshooting
 
-3. **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)**
+4. **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)**
    - Complete feature overview
    - All implemented endpoints
    - Service architecture
    - Component structure
 
-4. **[GEMINI_MIGRATION.md](./GEMINI_MIGRATION.md)**
+5. **[GEMINI_MIGRATION.md](./GEMINI_MIGRATION.md)**
    - Migration from OpenAI to Gemini
    - Cost comparisons
    - Performance benchmarks

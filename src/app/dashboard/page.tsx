@@ -79,7 +79,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           <Link href="/dashboard/upload">
             <Card className="hover:shadow-lg transition cursor-pointer">
               <CardHeader>
@@ -121,11 +121,25 @@ export default function DashboardPage() {
               <CardHeader>
                 <CardTitle className="text-lg flex items-center">
                   <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clipRule="evenodd" />
+                    <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 715 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clipRule="evenodd" />
                   </svg>
                   Voice Interview
                 </CardTitle>
                 <CardDescription>Practice with voice & get coaching</CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
+
+          <Link href="/dashboard/job-alerts">
+            <Card className="hover:shadow-lg transition cursor-pointer bg-gradient-to-br from-orange-50 to-yellow-50">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center">
+                  <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                  </svg>
+                  Job Alerts
+                </CardTitle>
+                <CardDescription>Get daily job matches via email</CardDescription>
               </CardHeader>
             </Card>
           </Link>
