@@ -20,9 +20,15 @@ AI Resume Builder is a comprehensive platform that helps job seekers:
 
 ## Quick Links
 
+### 🚀 **NEW: [SETUP_GUIDE.md](./SETUP_GUIDE.md)** - BEGINNER-FRIENDLY GUIDE!
+   - **Step-by-step setup** explained like you're 10 years old!
+   - All commands with explanations
+   - Troubleshooting common problems
+   - Complete from clone to running app
+
 ### 📋 Documentation
 
-1. **[SETUP.md](./SETUP.md)** - START HERE
+1. **[SETUP.md](./SETUP.md)** - Technical Setup (Advanced)
    - Environment setup instructions
    - Database configuration (Local or Supabase)
    - API key setup (Gemini)
@@ -101,34 +107,36 @@ AI Resume Builder is a comprehensive platform that helps job seekers:
 
 ## Quick Start
 
+### 🎯 New to this? Start here: **[SETUP_GUIDE.md](./SETUP_GUIDE.md)**
+
+**Simple 7 Steps:**
+
 ```bash
 # 1. Clone repository
-git clone <repository-url>
+git clone https://github.com/Vijaykrishna2334/Ai_Resume.git
 cd Ai_Resume
 
-# 2. Install dependencies
-npm install
+# 2. Install dependencies (skip puppeteer)
+PUPPETEER_SKIP_DOWNLOAD=true npm install
 
 # 3. Set up environment variables
 cp .env.example .env
-# Edit .env and add:
-# - DATABASE_URL (PostgreSQL connection string)
-# - NEXTAUTH_SECRET (generate with: openssl rand -base64 32)
-# - NEXTAUTH_URL (http://localhost:3000)
-# - GEMINI_API_KEY (get from Google AI Studio)
+# Edit .env and add your API keys (see SETUP_GUIDE.md for where to get them)
 
-# 4. Set up database
+# 4. Set up database (using Supabase - easiest!)
 npx prisma generate
 npx prisma db push
 
 # 5. Start development server
 npm run dev
 
-# 6. Open browser
-# Navigate to http://localhost:3000
+# 6. Open browser at http://localhost:3000
+
+# 7. Sign up and start building resumes! 🎉
 ```
 
-For detailed setup instructions, see [SETUP.md](./SETUP.md)
+**Need help?** Check **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** for detailed explanations!
+For technical setup, see **[SETUP.md](./SETUP.md)**
 
 ---
 
@@ -285,5 +293,5 @@ This project is in the planning phase. Development will begin with Phase 0 (Foun
 
 ---
 
-**Last Updated:** 2025-11-16
-**Status:** V1 MVP Complete with Voice Interview ✅
+**Last Updated:** 2025-11-17
+**Status:** V1 MVP Complete with Enhanced Frontend & Job Alerts ✅
