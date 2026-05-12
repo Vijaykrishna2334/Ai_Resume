@@ -1,297 +1,137 @@
-# AI Resume Builder
+<div align="center">
 
-**Status:** V1 MVP Implemented ✅
-**Latest Feature:** Automated Daily Job Alerts 🔔
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=160&section=header&text=AI%20Resume%20Builder&fontSize=40&fontColor=fff&animation=twinkling&fontAlignY=36&desc=AI-Powered%20Resume%20Optimization%2C%20Portfolio%20%26%20Job%20Matching%20Platform&descAlignY=58&descSize=14" width="100%"/>
 
----
+[![Next.js](https://img.shields.io/badge/Next.js_15-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Gemini](https://img.shields.io/badge/Gemini_2.5-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-## Overview
+**Resume optimization · ATS scoring · Portfolio generation · Daily job alerts · Mock interviews**
 
-AI Resume Builder is a comprehensive platform that helps job seekers:
-- Upload and parse existing resumes (PDF/DOCX)
-- Optimize resumes for specific job descriptions using AI
-- Generate ATS-friendly PDF resumes and cover letters
-- Create professional portfolio websites
-- Practice interviews with AI-powered mock interviews (text & voice)
-- Get voice coaching with detailed speaking metrics and feedback
-- **NEW: Receive personalized job matches via email daily**
+</div>
 
 ---
 
-## Quick Links
+## 🎯 What It Does
 
-### 🚀 **NEW: [SETUP_GUIDE.md](./SETUP_GUIDE.md)** - BEGINNER-FRIENDLY GUIDE!
-   - **Step-by-step setup** explained like you're 10 years old!
-   - All commands with explanations
-   - Troubleshooting common problems
-   - Complete from clone to running app
-
-### 📋 Documentation
-
-1. **[SETUP.md](./SETUP.md)** - Technical Setup (Advanced)
-   - Environment setup instructions
-   - Database configuration (Local or Supabase)
-   - API key setup (Gemini)
-   - Running the application
-
-1a. **[SUPABASE_SETUP.md](./SUPABASE_SETUP.md)** - Database Setup
-   - Complete Supabase configuration guide
-   - Cloud database setup (recommended)
-   - File storage configuration
-   - Migration guides
-
-2. **[JOB_ALERTS_FEATURE.md](./JOB_ALERTS_FEATURE.md)** - NEW!
-   - Automated job matching documentation
-   - Multi-source job aggregation
-   - AI-powered matching system
-   - Email notifications setup
-   - Cron scheduler configuration
-   - Complete API reference
-
-3. **[VOICE_INTERVIEW_FEATURE.md](./VOICE_INTERVIEW_FEATURE.md)**
-   - Complete voice interview documentation
-   - Technical implementation details
-   - API specifications
-   - Usage guide and best practices
-   - Troubleshooting
-
-4. **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)**
-   - Complete feature overview
-   - All implemented endpoints
-   - Service architecture
-   - Component structure
-
-5. **[GEMINI_MIGRATION.md](./GEMINI_MIGRATION.md)**
-   - Migration from OpenAI to Gemini
-   - Cost comparisons
-   - Performance benchmarks
-   - Rollback instructions
-
-### 📋 Planning Documents (Historical)
-
-1. **[EXECUTIVE_SUMMARY.md](./EXECUTIVE_SUMMARY.md)**
-2. **[PRD_GAP_ANALYSIS.md](./PRD_GAP_ANALYSIS.md)**
-3. **[IMPLEMENTATION_ROADMAP.md](./IMPLEMENTATION_ROADMAP.md)**
-4. **[TECHNICAL_ARCHITECTURE.md](./TECHNICAL_ARCHITECTURE.md)**
+AI Resume Builder is a full-stack platform that takes your resume and transforms your entire job search. Upload your resume, paste a job description — get an ATS-optimized resume, tailored cover letter, and a professional portfolio site, all powered by **Google Gemini 2.5**.
 
 ---
 
-## Technology Stack
+## ✨ Key Features
 
-**Frontend:** Next.js 14, TypeScript, Tailwind CSS, shadcn/ui
-**Backend:** Next.js API Routes, Prisma ORM
-**Database:** PostgreSQL (Supabase or local)
-**AI:** Google Gemini (Gemini 2.5 Flash + Gemini 2.5 Pro)
-**Voice:** Web Speech API (SpeechRecognition + SpeechSynthesis)
-**Storage:** Supabase Storage / Local filesystem
-**Hosting:** Vercel
-**Auth:** NextAuth.js with JWT
-
----
-
-## Development Timeline
-
-**Total:** 10 weeks for V1 MVP
-
-- **Week 1-2:** Foundation (Auth + Database)
-- **Week 2-3:** Core Backend API
-- **Week 3-4:** Resume Parsing
-- **Week 4-5:** AI Optimization
-- **Week 5-6:** Profile Management UI
-- **Week 6-7:** PDF Generation
-- **Week 7-8:** Portfolio Generation
-- **Week 8-9:** Mock Interview
-- **Week 9-10:** Polish & Testing
+| Feature | Description |
+|---|---|
+| 📄 **Resume Parser** | Upload PDF/DOCX — AI extracts and structures your experience |
+| 🎯 **ATS Optimizer** | Match resume to any JD with Gemini-powered keyword optimization |
+| 📝 **Cover Letter Generator** | Tailored cover letters for each application in seconds |
+| 🌐 **Portfolio Builder** | Auto-generate a professional portfolio website from your resume |
+| 🎤 **Mock Interviews** | AI-powered text + voice interview practice with feedback |
+| 🔊 **Voice Coaching** | Speaking metrics, pacing analysis, and improvement tips |
+| 🔔 **Daily Job Alerts** | Automated personalized job matches delivered to your inbox |
+| 📊 **ATS Score** | Real-time score showing how well your resume matches a JD |
 
 ---
 
-## Quick Start
+## 🏗 How It Works
 
-### 🎯 New to this? Start here: **[SETUP_GUIDE.md](./SETUP_GUIDE.md)**
+```
+Upload resume (PDF/DOCX)
+        ↓
+Gemini 2.5 parses and structures all content
+        ↓
+Paste a job description → AI optimizes resume for ATS
+        ↓
+Generate cover letter + portfolio site
+        ↓
+Practice with AI mock interviewer
+        ↓
+Daily job alerts emailed based on your profile
+```
 
-**Simple 7 Steps:**
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | Next.js 15, TypeScript, Tailwind CSS |
+| **AI** | Google Gemini 2.5 Flash + Pro — all AI features |
+| **Database** | Supabase (PostgreSQL) + Storage |
+| **Auth** | Supabase Auth |
+| **Email** | Automated job alert scheduler (GitHub Actions cron) |
+| **PDF** | Resume + cover letter PDF generation |
+
+---
+
+## ⚡ Quick Start
+
+### Prerequisites
+- Node.js 18+
+- Supabase account
+- Google Gemini API key (free at [ai.google.dev](https://ai.google.dev))
+
+### Setup
 
 ```bash
-# 1. Clone repository
+# Clone
 git clone https://github.com/Vijaykrishna2334/Ai_Resume.git
 cd Ai_Resume
 
-# 2. Install dependencies (skip puppeteer)
-PUPPETEER_SKIP_DOWNLOAD=true npm install
+# Install dependencies
+npm install
 
-# 3. Set up environment variables
-cp .env.example .env
-# Edit .env and add your API keys (see SETUP_GUIDE.md for where to get them)
+# Configure environment
+cp .env.example .env.local
+```
 
-# 4. Set up database (using Supabase - easiest!)
-npx prisma generate
-npx prisma db push
+Add to `.env.local`:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+GEMINI_API_KEY=your_gemini_api_key
+```
 
-# 5. Start development server
+```bash
+# Run
 npm run dev
-
-# 6. Open browser at http://localhost:3000
-
-# 7. Sign up and start building resumes! 🎉
 ```
 
-**Need help?** Check **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** for detailed explanations!
-For technical setup, see **[SETUP.md](./SETUP.md)**
+Open [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## Project Structure (After Setup)
+## 📁 Project Structure
 
 ```
-ai-resume-builder/
-├── src/
-│   ├── app/
-│   │   ├── api/              # API routes
-│   │   ├── auth/             # Auth pages
-│   │   ├── dashboard/        # Main dashboard
-│   │   └── profile/          # Profile editor
-│   ├── components/           # React components
-│   ├── lib/
-│   │   ├── services/         # Business logic
-│   │   ├── repositories/     # Database access
-│   │   ├── validations/      # Zod schemas
-│   │   ├── auth.ts           # NextAuth config
-│   │   └── prisma.ts         # Prisma client
-│   └── types/                # TypeScript types
-├── prisma/
-│   └── schema.prisma         # Database schema
-├── public/                   # Static files
-└── docs/                     # Documentation
+Ai_Resume/
+├── app/
+│   ├── api/              # API routes
+│   ├── dashboard/        # Main app dashboard
+│   ├── portfolio/        # Portfolio builder
+│   └── interview/        # Mock interview UI
+├── components/           # Reusable UI components
+├── lib/                  # Gemini AI + Supabase clients
+├── .github/
+│   └── workflows/        # Job alerts cron workflow
+├── .env.example          # Environment variables template
+└── package.json
 ```
 
 ---
 
-## Cost Estimates
+## 🔔 Automated Job Alerts
 
-### Development
-- **Timeline:** 10 weeks (solo) or 6 weeks (team of 2)
-- **Effort:** 400-600 hours
-
-### Infrastructure (Monthly)
-
-**Development:**
-- Vercel: $0 (Hobby)
-- Supabase: $0 (Free tier)
-- Gemini: $0 (Generous free tier - 1,500 requests/day)
-- **Total: ~$0/month**
-
-**Production (1K users):**
-- Vercel: $20
-- Supabase: $25
-- Gemini: $20-50 (70% cheaper than OpenAI)
-- S3 + SendGrid + Sentry: $35
-- **Total: $100-130/month**
-
-**Per User:** $0.20-0.40 (58% cost reduction)
+Daily job matching runs automatically via **GitHub Actions** — no server needed. Configure your job preferences in the dashboard and get matched roles delivered every morning.
 
 ---
 
-## Current Status
+## 📬 Contact
 
-**Repository State:** V1 MVP Fully Implemented ✅
+**Built by [Vijay Krishna](https://github.com/Vijaykrishna2334)**
+- 📧 vijaykrishna2334@gmail.com
+- 💼 [LinkedIn](https://linkedin.com/in/vijaykrishna2334)
 
-**Completed:**
-- ✅ PRD gap analysis & planning
-- ✅ Technical architecture implementation
-- ✅ Complete database schema with Prisma
-- ✅ User authentication with NextAuth.js
-- ✅ Resume parsing (PDF/DOCX) with AI
-- ✅ Job description analysis & optimization
-- ✅ Profile management & editing
-- ✅ Application tracking
-- ✅ Text-based mock interviews
-- ✅ **NEW: Voice interview with comprehensive coaching**
-- ✅ API usage tracking & cost monitoring
-- ✅ Complete documentation
-
-**Latest Addition:**
-- 🎤 **Voice Interview Feature** - AI-powered voice coaching with real-time analysis
-  - Text-to-Speech question delivery
-  - Voice recording with live transcription
-  - Comprehensive voice metrics (WPM, pauses, filler words, confidence, clarity, energy)
-  - Personalized coaching and resource recommendations
-  - Detailed final report with action plans
-
----
-
-## Key Features
-
-### V1 MVP - Implemented ✅
-
-**Core Features:**
-- ✅ User authentication (sign up, login, JWT sessions)
-- ✅ Resume upload and parsing (PDF, DOCX)
-- ✅ AI-powered job description analysis
-- ✅ Match score calculation
-- ✅ Optimization suggestions
-- ✅ Profile editor (manual editing)
-- ✅ Cover letter generation
-- ✅ Application tracking
-- ✅ Mock interview (text-based)
-- ✅ Interview feedback with AI evaluation
-
-**Voice Interview Features (NEW):**
-- ✅ Text-to-Speech question delivery
-- ✅ Voice recording with Web Speech API
-- ✅ Real-time transcription
-- ✅ Comprehensive voice analysis:
-  - Speaking pace (Words Per Minute)
-  - Pause detection and analysis
-  - Filler word detection
-  - Confidence level assessment
-  - Clarity rating
-  - Energy level measurement
-- ✅ Dual feedback system (content + delivery)
-- ✅ Personalized voice coaching
-- ✅ Resource recommendations
-- ✅ Exercise suggestions
-- ✅ Comprehensive final report with action plan
-
-### V2 Features (Planned)
-
-- PDF resume generation (3 templates)
-- Portfolio website generation
-- Portfolio customization
-- Multiple resume versions
-- LinkedIn profile sync
-- Automated job alerts
-- Advanced voice analytics (tone, emotion)
-- Interview recording playback
-- Collaborative features (mentor sharing)
-
----
-
-## Getting Started
-
-1. **Read:** [EXECUTIVE_SUMMARY.md](./EXECUTIVE_SUMMARY.md)
-2. **Review:** [PRD_GAP_ANALYSIS.md](./PRD_GAP_ANALYSIS.md)
-3. **Follow:** [IMPLEMENTATION_ROADMAP.md](./IMPLEMENTATION_ROADMAP.md)
-4. **Reference:** [TECHNICAL_ARCHITECTURE.md](./TECHNICAL_ARCHITECTURE.md)
-
----
-
-## Contributing
-
-This project is in the planning phase. Development will begin with Phase 0 (Foundation).
-
----
-
-## License
-
-[Add license information]
-
----
-
-## Contact
-
-[Add contact information]
-
----
-
-**Last Updated:** 2025-11-17
-**Status:** V1 MVP Complete with Enhanced Frontend & Job Alerts ✅
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=80&section=footer" width="100%"/>
