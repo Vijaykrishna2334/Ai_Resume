@@ -1,0 +1,22 @@
+name: Job Alerts Cron
+
+# Run every hour
+on:
+  schedule:
+    - cron: '0 * * * *'
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  trigger-job-alerts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Job Alerts
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            ${{ secrets.APP_URL }}/api/cron/job-alerts
+
+      - name: Log completion
+        run: echo "Job alerts cron completed at $(date)"

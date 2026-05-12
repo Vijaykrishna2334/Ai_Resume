@@ -1,219 +1,297 @@
-# PortfolioAI - AI-Powered Resume Optimization System
+# AI Resume Builder
 
-An intelligent resume optimization platform that uses Google Gemini AI to analyze resumes, match them against job descriptions, and generate professionally formatted documents.
-
-## 🎯 Features
-
-- **Resume Analysis**: Upload PDF/DOCX resumes for AI-powered parsing
-- **Job Matching**: Analyze job descriptions and get AI-driven match scores
-- **Smart Suggestions**: Receive actionable recommendations to improve your resume
-- **Multi-Style Generation**: Generate resumes in 3 professional styles:
-  - **Minimalist**: Clean, simple layout
-  - **Technical**: Code-oriented formatting
-  - **Creative**: Modern, colorful design
-- **Document Export**: Download as PDF or DOCX
-- **AI Cover Letters**: Automatically generate personalized cover letters
-- **Mock Interviews**: Practice with AI-powered interview simulations (bonus feature)
-
-## 🏗️ Architecture
-
-- **Frontend**: React + Vite + Tailwind CSS
-- **Backend**: Python Flask + Google Gemini AI
-- **Document Generation**: ReportLab (PDF) + python-docx (DOCX)
-- **AI Model**: Google Gemini 2.5 Flash
-
-## 📋 Prerequisites
-
-- Python 3.12+
-- Node.js 18+
-- Google Gemini API Key ([Get one here](https://aistudio.google.com/app/apikey))
-
-## 🚀 Quick Start
-
-### 1. Clone and Setup
-
-```bash
-git clone <your-repo-url>
-cd Resume
-```
-
-### 2. Backend Setup (Python)
-
-```bash
-# Navigate to Python backend
-cd python_backend
-
-# Activate virtual environment (if you have one)
-# Windows:
-venv\Scripts\activate
-# Mac/Linux:
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Create .env file
-copy .env.example .env  # Windows
-# OR
-cp .env.example .env    # Mac/Linux
-
-# Edit .env and add your API key
-# GEMINI_API_KEY=your_actual_api_key_here
-
-# Start backend
-python app.py
-```
-
-Backend runs on: **http://localhost:8080**
-
-### 3. Frontend Setup (React)
-
-```bash
-# From root directory
-npm install
-
-# Start frontend
-npm run dev
-```
-
-Frontend runs on: **http://localhost:5173**
-
-## 🎮 How to Use
-
-1. **Open Browser**: Navigate to `http://localhost:5173`
-2. **Sign Up**: Enter your name and email
-3. **Upload Resume**: Upload your PDF or DOCX resume (optional - you can use mock data)
-4. **Paste Job Description**: Copy and paste a job posting
-5. **Analyze**: Click "Analyze Match" to get AI-powered insights
-6. **View Suggestions**: Review recommended improvements
-7. **Select Style**: Choose minimalist, technical, or creative
-8. **Generate Documents**: Click "Generate Resume and Cover Letter"
-9. **Download**: Download your optimized PDF and DOCX files
-
-## 📁 Project Structure
-
-```
-Resume/
-├── python_backend/          # Flask API backend
-│   ├── app.py              # Main Flask application
-│   ├── requirements.txt    # Python dependencies
-│   └── .env               # Environment variables (create this)
-├── src/                    # React frontend source
-│   ├── App.jsx            # Main React component
-│   ├── main.jsx           # React entry point
-│   └── index.css          # Tailwind styles
-├── index.html             # HTML entry point
-├── package.json           # Node dependencies
-└── vite.config.js         # Vite configuration
-```
-
-## 🔧 Environment Variables
-
-Create `python_backend/.env` with:
-
-```env
-# Google Gemini API Key (Required)
-GEMINI_API_KEY=your_api_key_here
-
-# Server Configuration
-PORT=8080
-```
-
-## 🌐 API Endpoints
-
-### Health Check
-```
-GET /health
-```
-
-### Resume Parsing
-```
-POST /api/optimizer/parse-resume
-Content-Type: multipart/form-data
-Body: file (PDF or DOCX)
-```
-
-### Job Analysis
-```
-POST /api/optimizer/analyze
-Content-Type: application/json
-Body: { jd: string, profile: object }
-```
-
-### Document Generation
-```
-POST /api/optimizer/generate-documents
-Content-Type: application/json
-Body: { profile: object, jd: string, style: string }
-```
-
-## 🐛 Troubleshooting
-
-### CORS Errors
-- Ensure Python backend is running on port 8080
-- Check that frontend is accessing `localhost:5173`
-
-### API Key Errors
-- Verify `GEMINI_API_KEY` is set in `python_backend/.env`
-- Test API key at [Google AI Studio](https://aistudio.google.com/)
-
-### Import Errors (Python)
-```bash
-# Reinstall dependencies
-pip install -r requirements.txt
-```
-
-### Port Already in Use
-```bash
-# Kill process on port 8080
-# Windows:
-netstat -ano | findstr :8080
-taskkill /PID <PID> /F
-
-# Mac/Linux:
-lsof -ti:8080 | xargs kill -9
-```
-
-## 🎨 Available Resume Styles
-
-1. **Minimalist**: Clean design with standard fonts, perfect for conservative industries
-2. **Technical**: Monospace fonts and code-style formatting for tech roles
-3. **Creative**: Modern colors and dynamic layouts for creative positions
-
-## 📝 Technologies Used
-
-### Frontend
-- React 18
-- Vite 4
-- Tailwind CSS
-- Lucide React (icons)
-
-### Backend
-- Flask 3.1
-- Google Genai SDK
-- Pydantic (data validation)
-- ReportLab (PDF generation)
-- python-docx (DOCX generation)
-- pypdf (PDF parsing)
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 🙏 Acknowledgments
-
-- Google Gemini AI for powerful language models
-- ReportLab for PDF generation
-- The open-source community
+**Status:** V1 MVP Implemented ✅
+**Latest Feature:** Automated Daily Job Alerts 🔔
 
 ---
 
-**Made with ❤️ using Google Gemini AI**
+## Overview
+
+AI Resume Builder is a comprehensive platform that helps job seekers:
+- Upload and parse existing resumes (PDF/DOCX)
+- Optimize resumes for specific job descriptions using AI
+- Generate ATS-friendly PDF resumes and cover letters
+- Create professional portfolio websites
+- Practice interviews with AI-powered mock interviews (text & voice)
+- Get voice coaching with detailed speaking metrics and feedback
+- **NEW: Receive personalized job matches via email daily**
+
+---
+
+## Quick Links
+
+### 🚀 **NEW: [SETUP_GUIDE.md](./SETUP_GUIDE.md)** - BEGINNER-FRIENDLY GUIDE!
+   - **Step-by-step setup** explained like you're 10 years old!
+   - All commands with explanations
+   - Troubleshooting common problems
+   - Complete from clone to running app
+
+### 📋 Documentation
+
+1. **[SETUP.md](./SETUP.md)** - Technical Setup (Advanced)
+   - Environment setup instructions
+   - Database configuration (Local or Supabase)
+   - API key setup (Gemini)
+   - Running the application
+
+1a. **[SUPABASE_SETUP.md](./SUPABASE_SETUP.md)** - Database Setup
+   - Complete Supabase configuration guide
+   - Cloud database setup (recommended)
+   - File storage configuration
+   - Migration guides
+
+2. **[JOB_ALERTS_FEATURE.md](./JOB_ALERTS_FEATURE.md)** - NEW!
+   - Automated job matching documentation
+   - Multi-source job aggregation
+   - AI-powered matching system
+   - Email notifications setup
+   - Cron scheduler configuration
+   - Complete API reference
+
+3. **[VOICE_INTERVIEW_FEATURE.md](./VOICE_INTERVIEW_FEATURE.md)**
+   - Complete voice interview documentation
+   - Technical implementation details
+   - API specifications
+   - Usage guide and best practices
+   - Troubleshooting
+
+4. **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)**
+   - Complete feature overview
+   - All implemented endpoints
+   - Service architecture
+   - Component structure
+
+5. **[GEMINI_MIGRATION.md](./GEMINI_MIGRATION.md)**
+   - Migration from OpenAI to Gemini
+   - Cost comparisons
+   - Performance benchmarks
+   - Rollback instructions
+
+### 📋 Planning Documents (Historical)
+
+1. **[EXECUTIVE_SUMMARY.md](./EXECUTIVE_SUMMARY.md)**
+2. **[PRD_GAP_ANALYSIS.md](./PRD_GAP_ANALYSIS.md)**
+3. **[IMPLEMENTATION_ROADMAP.md](./IMPLEMENTATION_ROADMAP.md)**
+4. **[TECHNICAL_ARCHITECTURE.md](./TECHNICAL_ARCHITECTURE.md)**
+
+---
+
+## Technology Stack
+
+**Frontend:** Next.js 14, TypeScript, Tailwind CSS, shadcn/ui
+**Backend:** Next.js API Routes, Prisma ORM
+**Database:** PostgreSQL (Supabase or local)
+**AI:** Google Gemini (Gemini 2.5 Flash + Gemini 2.5 Pro)
+**Voice:** Web Speech API (SpeechRecognition + SpeechSynthesis)
+**Storage:** Supabase Storage / Local filesystem
+**Hosting:** Vercel
+**Auth:** NextAuth.js with JWT
+
+---
+
+## Development Timeline
+
+**Total:** 10 weeks for V1 MVP
+
+- **Week 1-2:** Foundation (Auth + Database)
+- **Week 2-3:** Core Backend API
+- **Week 3-4:** Resume Parsing
+- **Week 4-5:** AI Optimization
+- **Week 5-6:** Profile Management UI
+- **Week 6-7:** PDF Generation
+- **Week 7-8:** Portfolio Generation
+- **Week 8-9:** Mock Interview
+- **Week 9-10:** Polish & Testing
+
+---
+
+## Quick Start
+
+### 🎯 New to this? Start here: **[SETUP_GUIDE.md](./SETUP_GUIDE.md)**
+
+**Simple 7 Steps:**
+
+```bash
+# 1. Clone repository
+git clone https://github.com/Vijaykrishna2334/Ai_Resume.git
+cd Ai_Resume
+
+# 2. Install dependencies (skip puppeteer)
+PUPPETEER_SKIP_DOWNLOAD=true npm install
+
+# 3. Set up environment variables
+cp .env.example .env
+# Edit .env and add your API keys (see SETUP_GUIDE.md for where to get them)
+
+# 4. Set up database (using Supabase - easiest!)
+npx prisma generate
+npx prisma db push
+
+# 5. Start development server
+npm run dev
+
+# 6. Open browser at http://localhost:3000
+
+# 7. Sign up and start building resumes! 🎉
+```
+
+**Need help?** Check **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** for detailed explanations!
+For technical setup, see **[SETUP.md](./SETUP.md)**
+
+---
+
+## Project Structure (After Setup)
+
+```
+ai-resume-builder/
+├── src/
+│   ├── app/
+│   │   ├── api/              # API routes
+│   │   ├── auth/             # Auth pages
+│   │   ├── dashboard/        # Main dashboard
+│   │   └── profile/          # Profile editor
+│   ├── components/           # React components
+│   ├── lib/
+│   │   ├── services/         # Business logic
+│   │   ├── repositories/     # Database access
+│   │   ├── validations/      # Zod schemas
+│   │   ├── auth.ts           # NextAuth config
+│   │   └── prisma.ts         # Prisma client
+│   └── types/                # TypeScript types
+├── prisma/
+│   └── schema.prisma         # Database schema
+├── public/                   # Static files
+└── docs/                     # Documentation
+```
+
+---
+
+## Cost Estimates
+
+### Development
+- **Timeline:** 10 weeks (solo) or 6 weeks (team of 2)
+- **Effort:** 400-600 hours
+
+### Infrastructure (Monthly)
+
+**Development:**
+- Vercel: $0 (Hobby)
+- Supabase: $0 (Free tier)
+- Gemini: $0 (Generous free tier - 1,500 requests/day)
+- **Total: ~$0/month**
+
+**Production (1K users):**
+- Vercel: $20
+- Supabase: $25
+- Gemini: $20-50 (70% cheaper than OpenAI)
+- S3 + SendGrid + Sentry: $35
+- **Total: $100-130/month**
+
+**Per User:** $0.20-0.40 (58% cost reduction)
+
+---
+
+## Current Status
+
+**Repository State:** V1 MVP Fully Implemented ✅
+
+**Completed:**
+- ✅ PRD gap analysis & planning
+- ✅ Technical architecture implementation
+- ✅ Complete database schema with Prisma
+- ✅ User authentication with NextAuth.js
+- ✅ Resume parsing (PDF/DOCX) with AI
+- ✅ Job description analysis & optimization
+- ✅ Profile management & editing
+- ✅ Application tracking
+- ✅ Text-based mock interviews
+- ✅ **NEW: Voice interview with comprehensive coaching**
+- ✅ API usage tracking & cost monitoring
+- ✅ Complete documentation
+
+**Latest Addition:**
+- 🎤 **Voice Interview Feature** - AI-powered voice coaching with real-time analysis
+  - Text-to-Speech question delivery
+  - Voice recording with live transcription
+  - Comprehensive voice metrics (WPM, pauses, filler words, confidence, clarity, energy)
+  - Personalized coaching and resource recommendations
+  - Detailed final report with action plans
+
+---
+
+## Key Features
+
+### V1 MVP - Implemented ✅
+
+**Core Features:**
+- ✅ User authentication (sign up, login, JWT sessions)
+- ✅ Resume upload and parsing (PDF, DOCX)
+- ✅ AI-powered job description analysis
+- ✅ Match score calculation
+- ✅ Optimization suggestions
+- ✅ Profile editor (manual editing)
+- ✅ Cover letter generation
+- ✅ Application tracking
+- ✅ Mock interview (text-based)
+- ✅ Interview feedback with AI evaluation
+
+**Voice Interview Features (NEW):**
+- ✅ Text-to-Speech question delivery
+- ✅ Voice recording with Web Speech API
+- ✅ Real-time transcription
+- ✅ Comprehensive voice analysis:
+  - Speaking pace (Words Per Minute)
+  - Pause detection and analysis
+  - Filler word detection
+  - Confidence level assessment
+  - Clarity rating
+  - Energy level measurement
+- ✅ Dual feedback system (content + delivery)
+- ✅ Personalized voice coaching
+- ✅ Resource recommendations
+- ✅ Exercise suggestions
+- ✅ Comprehensive final report with action plan
+
+### V2 Features (Planned)
+
+- PDF resume generation (3 templates)
+- Portfolio website generation
+- Portfolio customization
+- Multiple resume versions
+- LinkedIn profile sync
+- Automated job alerts
+- Advanced voice analytics (tone, emotion)
+- Interview recording playback
+- Collaborative features (mentor sharing)
+
+---
+
+## Getting Started
+
+1. **Read:** [EXECUTIVE_SUMMARY.md](./EXECUTIVE_SUMMARY.md)
+2. **Review:** [PRD_GAP_ANALYSIS.md](./PRD_GAP_ANALYSIS.md)
+3. **Follow:** [IMPLEMENTATION_ROADMAP.md](./IMPLEMENTATION_ROADMAP.md)
+4. **Reference:** [TECHNICAL_ARCHITECTURE.md](./TECHNICAL_ARCHITECTURE.md)
+
+---
+
+## Contributing
+
+This project is in the planning phase. Development will begin with Phase 0 (Foundation).
+
+---
+
+## License
+
+[Add license information]
+
+---
+
+## Contact
+
+[Add contact information]
+
+---
+
+**Last Updated:** 2025-11-17
+**Status:** V1 MVP Complete with Enhanced Frontend & Job Alerts ✅
